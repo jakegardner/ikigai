@@ -1,7 +1,9 @@
 import React from 'react';
-import { Text, View, StyleSheet } from 'react-native';
+import { Dimensions, Text, View, StyleSheet } from 'react-native';
 import { compose, withProps } from 'recompose';
 import NavigationButton from '../../Components/NavigationButton';
+
+const { width: screenWidth, height: screenHeight } = Dimensions.get('screen');
 
 const styles = StyleSheet.create({
   container: {
@@ -14,13 +16,16 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 18,
+    position: 'absolute',
+    width: screenWidth,
+    textAlign: 'center',
   },
 });
 
 const NavigationBar = ({ title, leftButton, rightButton }) => (
   <View style={styles.container}>
-    {leftButton}
     <Text style={styles.title}>{title}</Text>
+    {leftButton}
     {rightButton}
   </View>
 );

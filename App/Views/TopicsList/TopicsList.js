@@ -2,14 +2,11 @@ import React from 'react';
 import { Dimensions, Text, View, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
 import NavigationBar from '../../Components/NavigationBar';
 import ButtonBar from '../../Components/ButtonBar';
+import ListView from '../../Components/ListView';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('screen');
 
 const styles = StyleSheet.create({
-  listContainer: {
-    height: screenHeight - 80,
-    width: screenWidth,
-  },
   rowContainer: {
     width: screenWidth,
     paddingLeft: 15,
@@ -31,29 +28,14 @@ const TopicRow = ({ label, onPress }) => (
   </TouchableOpacity>
 );
 
-const TopicListRenderer = ({ items }) => (
-  <View style={styles.listContainer}>
-    <FlatList
-      data={items}
-      keyExtractor={({ label }) => label}
-      renderItem={({ item }) => <TopicRow label={item.label} onPress={item.onPress} />}
-    />
-  </View>
-);
-
 const TopicsList = ({ items, navButtons, buttons }) => (
-  <View>
-    <NavigationBar
-      title={'Topics'}
-      navButtons={navButtons}
-    />
-    <TopicListRenderer
-      items={items}
-    />
-    <ButtonBar
-      buttons={buttons}
-    />
-  </View>
+  <ListView
+    title={'Topics'}
+    items={items}
+    ItemRenderer={TopicRow}
+    navButtons={navButtons}
+    buttons={buttons}
+  />
 );
 
 export default TopicsList;
