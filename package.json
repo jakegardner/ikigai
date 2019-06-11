@@ -11,7 +11,8 @@
     "@storybook/addon-ondevice-knobs": "^4.1.18",
     "@storybook/addon-ondevice-notes": "^4.1.18",
     "react": "16.8.3",
-    "react-native": "0.59.8"
+    "react-native": "0.59.8",
+    "recompose": "^0.30.0"
   },
   "devDependencies": {
     "@babel/core": "^7.4.5",

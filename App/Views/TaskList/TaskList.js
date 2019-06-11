@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const TopicRow = ({ label, onPress }) => (
+const TaskRow = ({ label, onPress }) => (
   <TouchableOpacity onPress={onPress} style={styles.rowContainer}>
     <View>
       <Text style={styles.rowLabel}>{label}</Text>
@@ -31,23 +31,23 @@ const TopicRow = ({ label, onPress }) => (
   </TouchableOpacity>
 );
 
-const TopicListRenderer = ({ items }) => (
+const TaskListRenderer = ({ items }) => (
   <View style={styles.listContainer}>
     <FlatList
       data={items}
       keyExtractor={({ label }) => label}
-      renderItem={({ item }) => <TopicRow label={item.label} onPress={item.onPress} />}
+      renderItem={({ item }) => <TaskRow label={item.label} onPress={item.onPress} />}
     />
   </View>
 );
 
-const TopicsList = ({ items, navButtons, buttons }) => (
+const TasksList = ({ topicName, items, navButtons, buttons }) => (
   <View>
     <NavigationBar
-      title={'Topics'}
+      title={topicName}
       navButtons={navButtons}
     />
-    <TopicListRenderer
+    <TaskListRenderer
       items={items}
     />
     <ButtonBar
@@ -56,4 +56,4 @@ const TopicsList = ({ items, navButtons, buttons }) => (
   </View>
 );
 
-export default TopicsList;
+export default TasksList;

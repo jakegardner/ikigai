@@ -1,21 +1,23 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react-native';
 import { View, Text } from 'react-native';
-import TopicsList from './TopicsList';
+import TaskList from './TaskList';
 
-storiesOf('TopicsList', module)
+storiesOf('TaskList', module)
   .add('default view', () => (
-    <TopicsList
+    <TaskList
+      topicName={'Language'}
       navButtons={[
-        { label: 'Settings', onPress: () => null },
+        { label: 'Back', onPress: () => null },
         { label: 'Add', onPress: () => null },
       ]}
       items={[
-        { label: 'Language', onPress: () => null },
-        { label: 'Development', onPress: () => null },
+        { label: 'Study grammar', onPress: () => null },
+        { label: 'List to dialog', onPress: () => null },
       ]}
       buttons={[
         { label: 'Today', onPress: () => null },
+        { label: 'Topics', onPress: () => null },
       ]}
     />
   ));
