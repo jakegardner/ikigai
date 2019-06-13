@@ -1,11 +1,16 @@
 import React, { Component } from 'react';
-import StorybookUI from './storybook';
+import { Provider } from 'react-redux';
+import store from './App/Store';
+
+// import StorybookUI from './storybook';
 import AppNavigator from './AppNavigator';
 
 export default class App extends Component<Props> {
   render() {
     return (
-      <AppNavigator />
+      <Provider store={store}>
+        <AppNavigator />
+      </Provider>
     );
   }
 }
