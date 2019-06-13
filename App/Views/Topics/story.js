@@ -1,6 +1,5 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react-native';
-import { View, Text } from 'react-native';
 import Topics from './Topics';
 
 storiesOf('Topics', module)

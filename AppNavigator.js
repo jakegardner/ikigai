@@ -1,7 +1,5 @@
-import React, { Component } from 'react';
-import { createStackNavigator, createAppContainer } from "react-navigation";
+import { createStackNavigator, createAppContainer } from 'react-navigation';
 
-import StorybookUI from './storybook';
 import Today from './App/Views/Today';
 import AddItem from './App/Views/AddItem';
 import Topics from './App/Views/Topics';
