@@ -1,11 +1,11 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react-native';
 import { View, Text } from 'react-native';
-import TaskList from './TaskList';
+import Tasks from './Tasks';
 
-storiesOf('TaskList', module)
+storiesOf('Tasks', module)
   .add('default view', () => (
-    <TaskList
+    <Tasks
       topicName={'Language'}
       navButtons={[
         { label: 'Back', onPress: () => null },

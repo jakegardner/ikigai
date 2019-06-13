@@ -7,7 +7,7 @@ const { width: screenWidth, height: screenHeight } = Dimensions.get('screen');
 
 const styles = StyleSheet.create({
   listContainer: {
-    height: screenHeight - 80,
+    height: screenHeight - 128,
     width: screenWidth,
   },
   rowContainer: {
@@ -43,10 +43,6 @@ const ListRenderer = ({ items, ItemRenderer }) => (
 
 const ListView = ({ title, navButtons, items, ItemRenderer, buttons }) => (
   <View>
-    <NavigationBar
-      title={title}
-      navButtons={navButtons}
-    />
     <ListRenderer
       items={items}
       ItemRenderer={ItemRenderer || DefaultRowRenderer}

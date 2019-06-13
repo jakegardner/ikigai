@@ -1,6 +1,7 @@
 import React from 'react';
 import { Dimensions, Text, View, StyleSheet } from 'react-native';
 import { compose, withProps } from 'recompose';
+import { get } from 'lodash';
 import NavigationButton from '../../Components/NavigationButton';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('screen');
@@ -36,8 +37,8 @@ const createNavButton = (descriptor) => (
 
 const enhance = compose(
   withProps(({ navButtons }) => ({
-    leftButton: createNavButton(navButtons[0]),
-    rightButton: createNavButton(navButtons[1]),
+    leftButton: get(navButtons, '[0]') && createNavButton(navButtons[0]),
+    rightButton: get(navButtons, '[1]') && createNavButton(navButtons[1]),
   })),
 );
 

@@ -33,7 +33,7 @@ const Button = ({ label, onPress }) => (
   </TouchableOpacity>
 );
 
-const ButtonBar = ({ buttons }) => (
+const ButtonBar = ({ buttons = [] }) => (
   <View style={styles.container}>
     {buttons.map(descriptor => <Button label={descriptor.label} onPress={descriptor.onPress} />)}
   </View>

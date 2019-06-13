@@ -10,8 +10,11 @@
   "dependencies": {
     "@storybook/addon-ondevice-knobs": "^4.1.18",
     "@storybook/addon-ondevice-notes": "^4.1.18",
+    "lodash": "^4.17.11",
     "react": "16.8.3",
     "react-native": "0.59.8",
+    "react-native-gesture-handler": "^1.3.0",
+    "react-navigation": "^3.11.0",
     "recompose": "^0.30.0"
   },
   "devDependencies": {

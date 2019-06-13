@@ -1,5 +1,6 @@
 import React from 'react';
 import { Dimensions, Text, View, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
+import { compose, withProps } from 'recompose';
 import NavigationBar from '../../Components/NavigationBar';
 import ButtonBar from '../../Components/ButtonBar';
 import ListView from '../../Components/ListView';
@@ -20,7 +21,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const TaskRow = ({ label, onPress }) => (
+const TopicRow = ({ label, onPress }) => (
   <TouchableOpacity onPress={onPress} style={styles.rowContainer}>
     <View>
       <Text style={styles.rowLabel}>{label}</Text>
@@ -28,14 +29,26 @@ const TaskRow = ({ label, onPress }) => (
   </TouchableOpacity>
 );
 
-const TasksList = ({ topicName, items, navButtons, buttons }) => (
+const Topics = ({ items, navButtons, buttons }) => (
   <ListView
-    title={topicName}
     items={items}
-    ItemRenderer={TaskRow}
+    ItemRenderer={TopicRow}
     navButtons={navButtons}
     buttons={buttons}
   />
 );
 
-export default TasksList;
+const enhance = compose(
+  withProps(({ navigation }) => ({
+    buttons: [
+      { label: 'Today', onPress: () => navigation.navigate('Today') },
+    ],
+  })),
+);
+
+const wrapped = enhance(Topics);
+wrapped.navigationOptions = {
+  title: 'Topics',
+};
+
+export default wrapped;

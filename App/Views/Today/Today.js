@@ -1,14 +1,19 @@
 import React from 'react';
-import { Dimensions, Text, View, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
+import {
+  Dimensions,
+  Text,
+  View,
+  FlatList,
+  TouchableOpacity,
+  StyleSheet,
+} from 'react-native';
+import { compose, withProps } from 'recompose';
+
 import ListView from '../../Components/ListView';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('screen');
 
 const styles = StyleSheet.create({
-  listContainer: {
-    height: screenHeight - 80,
-    width: screenWidth,
-  },
   rowContainer: {
     width: screenWidth,
     paddingLeft: 15,
@@ -32,7 +37,6 @@ const TodayRow = ({ label, onPress }) => (
 
 const Today = ({ items, navButtons, buttons }) => (
   <ListView
-    title={'Today'}
     items={items}
     ItemRenderer={TodayRow}
     navButtons={navButtons}
@@ -40,4 +44,17 @@ const Today = ({ items, navButtons, buttons }) => (
   />
 );
 
-export default Today;
+const enhance = compose(
+  withProps(({ navigation }) => ({
+    buttons: [
+      { label: 'Topics', onPress: () => navigation.navigate('Topics') },
+    ],
+  })),
+);
+
+const wrapped = enhance(Today);
+wrapped.navigationOptions = {
+  title: 'Today',
+};
+
+export default wrapped;

@@ -1,11 +1,11 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react-native';
 import { View, Text } from 'react-native';
-import TopicsList from './TopicsList';
+import Topics from './Topics';
 
-storiesOf('TopicsList', module)
+storiesOf('Topics', module)
   .add('default view', () => (
-    <TopicsList
+    <Topics
       navButtons={[
         { label: 'Settings', onPress: () => null },
         { label: 'Add', onPress: () => null },

@@ -1,11 +1,12 @@
-import React from 'react'
+import React from 'react';
 import {
   Dimensions,
   View,
   TextInput,
   Text,
   StyleSheet,
-} from 'react-native'
+} from 'react-native';
+import { compose, withProps } from 'recompose';
 import NavigationBar from '../../Components/NavigationBar';
 import ButtonBar from '../../Components/ButtonBar';
 
@@ -60,10 +61,6 @@ const AddForm = ({ topicName }) => (
 
 const AddItem = ({ title, navButtons, buttons, topicName }) => (
   <View style={styles.container}>
-    <NavigationBar
-      title={title}
-      navButtons={navButtons}
-    />
     <AddForm
       topicName={topicName}
     />
@@ -71,4 +68,18 @@ const AddItem = ({ title, navButtons, buttons, topicName }) => (
   </View>
 );
 
-export default AddItem;
+const enhance = compose(
+  withProps(({ navigation }) => ({
+    buttons: [
+      { label: 'Cancel', onPress: () => navigation.goBack() },
+      { label: 'Save', onPress: () => navigation.navigate('Today') },
+    ],
+  })),
+);
+
+const wrapped = enhance(AddItem);
+wrapped.navigationOptions = {
+  title: 'New Item',
+};
+
+export default wrapped;
