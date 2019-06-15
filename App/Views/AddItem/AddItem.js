@@ -1,4 +1,5 @@
 import React from 'react';
+import uuid from 'react-native-uuid';
 import {
   Dimensions,
   View,
@@ -6,15 +7,14 @@ import {
   Text,
   StyleSheet,
 } from 'react-native';
-import { compose, withProps } from 'recompose';
-import NavigationBar from '../../Components/NavigationBar';
+import { compose, withProps, withState } from 'recompose';
 import ButtonBar from '../../Components/ButtonBar';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('screen');
 
 const styles = StyleSheet.create({
   container: {
-    height: screenHeight - 80,
+    height: screenHeight - 128,
     width: screenWidth,
   },
   formContainer: {
@@ -45,10 +45,10 @@ const FormInput = ({ label, children }) => (
   </View>
 );
 
-const AddForm = ({ topicName }) => (
+const AddForm = ({ topicName, setName }) => (
   <View style={styles.formContainer}>
     <FormInput label={'Name'} >
-      <TextInput style={styles.textInput} onChange={() => null} />
+      <TextInput style={styles.textInput} onChangeText={setName} />
     </FormInput>
     {topicName && <FormInput label={'Date'}>
     </FormInput>}
@@ -59,20 +59,31 @@ const AddForm = ({ topicName }) => (
   </View>
 );
 
-const AddItem = ({ title, navButtons, buttons, topicName }) => (
+const AddItem = ({ buttons, topicName, setName }) => (
   <View style={styles.container}>
     <AddForm
       topicName={topicName}
+      setName={setName}
     />
     <ButtonBar buttons={buttons} />
   </View>
 );
 
 const enhance = compose(
-  withProps(({ navigation }) => ({
+  withState('name', 'setName'),
+  withProps(({ navigation, addTopic, name }) => ({
     buttons: [
       { label: 'Cancel', onPress: () => navigation.goBack() },
-      { label: 'Save', onPress: () => navigation.navigate('Today') },
+      {
+        label: 'Save',
+        onPress: () => {
+          addTopic({
+            id: uuid.v4(),
+            label: name,
+          });
+          navigation.navigate('Topics');
+        },
+      },
     ],
   })),
 );

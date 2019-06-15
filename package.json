@@ -5,7 +5,7 @@
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
     "storybook": "storybook start",
-    "test": "jest"
+    "test": "mocha --require ./__tests__/babel-polyfill.js './App/**/test.js'"
   },
   "dependencies": {
     "@storybook/addon-ondevice-knobs": "^4.1.18",
@@ -14,6 +14,7 @@
     "react": "16.8.3",
     "react-native": "0.59.8",
     "react-native-gesture-handler": "^1.3.0",
+    "react-native-uuid": "^1.4.9",
     "react-navigation": "^3.11.0",
     "react-redux": "^7.1.0",
     "recompose": "^0.30.0",
@@ -24,9 +25,12 @@
   },
   "devDependencies": {
     "@babel/core": "^7.4.5",
+    "@babel/polyfill": "^7.4.4",
+    "@babel/register": "^7.4.4",
     "@babel/runtime": "^7.4.5",
     "@storybook/react-native": "^4.1.18",
     "babel-jest": "^24.8.0",
+    "chai": "^4.2.0",
     "eslint": "^5.16.0",
     "eslint-config-airbnb": "^17.1.0",
     "eslint-plugin-import": "^2.17.3",
@@ -34,6 +38,7 @@
     "eslint-plugin-react": "^7.13.0",
     "jest": "^24.8.0",
     "metro-react-native-babel-preset": "^0.54.1",
+    "mocha": "^6.1.4",
     "react-test-renderer": "16.8.3"
   },
   "jest": {

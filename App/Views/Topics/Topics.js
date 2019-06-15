@@ -1,11 +1,16 @@
 import React from 'react';
-import { Dimensions, Text, View, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
+import {
+  Dimensions,
+  Text,
+  View,
+  TouchableOpacity,
+  StyleSheet,
+} from 'react-native';
 import { compose, withProps } from 'recompose';
-import NavigationBar from '../../Components/NavigationBar';
-import ButtonBar from '../../Components/ButtonBar';
 import ListView from '../../Components/ListView';
+import NavigationButton from '../../Components/NavigationButton';
 
-const { width: screenWidth, height: screenHeight } = Dimensions.get('screen');
+const { width: screenWidth } = Dimensions.get('screen');
 
 const styles = StyleSheet.create({
   rowContainer: {
@@ -29,11 +34,10 @@ const TopicRow = ({ label, onPress }) => (
   </TouchableOpacity>
 );
 
-const Topics = ({ items, navButtons, buttons }) => (
+const Topics = ({ items, buttons }) => (
   <ListView
     items={items}
     ItemRenderer={TopicRow}
-    navButtons={navButtons}
     buttons={buttons}
   />
 );
@@ -47,8 +51,14 @@ const enhance = compose(
 );
 
 const wrapped = enhance(Topics);
-wrapped.navigationOptions = {
+wrapped.navigationOptions = ({ navigation }) => ({
   title: 'Topics',
-};
+  headerRight: (
+    <NavigationButton
+      label={'Add'}
+      onPress={() => navigation.navigate('AddItem')}
+    />
+  ),
+});
 
 export default wrapped;
