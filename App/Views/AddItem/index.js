@@ -4,11 +4,13 @@ import AddItem from './AddItem';
 import {
   addTopic,
   addTask,
+  editTask,
 } from '../Topics/duck';
 
 const mapDispatchToProps = {
   addTopic,
   addTask,
+  editTask,
 };
 
 const enhance = compose(

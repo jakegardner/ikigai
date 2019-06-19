@@ -8,11 +8,13 @@ export const ADD_TOPIC = topicsDuck.defineType('ADD_TOPIC');
 export const DELETE_TOPIC = topicsDuck.defineType('DELETE_TOPIC');
 export const ADD_TASK = topicsDuck.defineType('ADD_TASK');
 export const DELETE_TASK = topicsDuck.defineType('DELETE_TASK');
+export const EDIT_TASK = topicsDuck.defineType('EDIT_TASK');
 
 export const addTopic = topicsDuck.createAction(ADD_TOPIC);
 export const deleteTopic = topicsDuck.createAction(DELETE_TOPIC);
 export const addTask = topicsDuck.createAction(ADD_TASK);
 export const deleteTask = topicsDuck.createAction(DELETE_TASK);
+export const editTask = topicsDuck.createAction(EDIT_TASK);
 
 export const INITIAL_STATE = Immutable.from({
   items: [],
@@ -34,7 +36,10 @@ const reducer = topicsDuck.createReducer({
       return state;
     }
     const topicIndex = state.items.findIndex(topic => topic.id === topicId);
-    return state.setIn(['items', topicIndex, 'tasks'], [...state.items[topicIndex].tasks, task]);
+    return state.setIn(
+      ['items', topicIndex, 'tasks'],
+      [...state.items[topicIndex].tasks, { ...task, topicId }],
+    );
   },
   [DELETE_TASK]: (state, { payload }) => {
     const { topicId, taskId } = payload;
@@ -48,6 +53,21 @@ const reducer = topicsDuck.createReducer({
     }
     const topicIndex = state.items.findIndex(item => item.id === topicId);
     return state.setIn(['items', topicIndex, 'tasks'], state.items[topicIndex].tasks.filter(task => task.id !== taskId));
+  },
+  [EDIT_TASK]: (state, { payload }) => {
+    const { topicId, taskId, task: updates } = payload;
+    if (!topicId) {
+      console.error(`${EDIT_TASK} missing topic id`);
+      return state;
+    }
+    if (!taskId) {
+      console.error(`${EDIT_TASK} missing task id`);
+      return state;
+    }
+    const topicIndex = state.items.findIndex(item => item.id === topicId);
+    const taskIndex = state.items[topicIndex].tasks.findIndex(item => item.id === taskId);
+    const taskToUpdate = state.items[topicIndex].tasks[taskIndex];
+    return state.setIn(['items', topicIndex, 'tasks', taskIndex], { ...taskToUpdate, ...updates });
   },
 }, INITIAL_STATE);
 

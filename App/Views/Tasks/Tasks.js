@@ -44,10 +44,17 @@ const Tasks = ({ items, navButtons, buttons }) => (
 );
 
 const enhance = compose(
-  withProps(({ navigation }) => ({
+  withProps(({ navigation, items }) => ({
     buttons: [
       { label: 'Topics', onPress: () => navigation.navigate('Topics') },
     ],
+    items: items.map(item => ({
+      ...item,
+      onPress: () => navigation.navigate('AddItem', {
+        task: item,
+        topicName: navigation.getParam('topicName'),
+      }),
+    })),
   })),
 );
 
@@ -57,7 +64,10 @@ wrapped.navigationOptions = ({ navigation }) => ({
   headerRight: (
     <NavigationButton
       label="Add"
-      onPress={() => navigation.navigate('AddItem', { topicId: navigation.getParam('topicId') })}
+      onPress={() => navigation.navigate('AddItem', {
+        topicId: navigation.getParam('topicId'),
+        topicName: navigation.getParam('topicName'),
+      })}
     />
   ),
 });

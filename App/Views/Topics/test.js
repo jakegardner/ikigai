@@ -7,6 +7,7 @@ import reducer, {
   deleteTopic,
   addTask,
   deleteTask,
+  editTask,
   selectTasksFor,
 } from './duck';
 
@@ -17,13 +18,13 @@ describe('topics', () => {
     });
 
     it('adds new topic', () => {
-      const newTopic = { id: '1', name: 'topic' };
+      const newTopic = { id: '1', label: 'topic' };
       const state = reducer(INITIAL_STATE, addTopic(newTopic));
       expect(state.items[0]).to.deep.equal(newTopic);
     });
 
     it('deletes topic', () => {
-      const newTopic = { id: '1', name: 'topic' };
+      const newTopic = { id: '1', label: 'topic' };
       const state = reducer(
         INITIAL_STATE.merge({ items: [newTopic] }),
         deleteTopic({ id: '1' }),
@@ -32,7 +33,7 @@ describe('topics', () => {
     });
 
     it('does not delete unspecified topic', () => {
-      const newTopic = { id: '1', name: 'topic' };
+      const newTopic = { id: '1', label: 'topic' };
       const state = reducer(
         INITIAL_STATE.merge({ items: [newTopic] }),
         deleteTopic({ id: '2' }),
@@ -42,18 +43,20 @@ describe('topics', () => {
     });
 
     it('adds new task', () => {
-      const newTopic = { id: '1', name: 'topic', tasks: [] };
-      const newTask = { id: '1', name: 'task' };
+      const newTopic = { id: '1', label: 'topic', tasks: [] };
+      const newTask = { id: 'a', label: 'task' };
       const state = reducer(
         INITIAL_STATE.merge({ items: [newTopic] }),
         addTask({ topicId: '1', task: newTask }),
       );
-      expect(state.items[0].tasks[0]).to.deep.equal(newTask);
+      expect(state.items[0].tasks[0].label).to.equal('task');
+      expect(state.items[0].tasks[0].id).to.equal('a');
+      expect(state.items[0].tasks[0].topicId).to.equal('1');
     });
 
     it('deletes task', () => {
-      const newTask = { id: '1', name: 'task' };
-      const newTopic = { id: '1', name: 'topic', tasks: [newTask] };
+      const newTask = { id: '1', label: 'task' };
+      const newTopic = { id: '1', label: 'topic', tasks: [newTask] };
       const state = reducer(
         INITIAL_STATE.merge({ items: [newTopic] }),
         deleteTask({ topicId: '1', taskId: '1' }),
@@ -62,8 +65,8 @@ describe('topics', () => {
     });
 
     it('does not delete unspecified task', () => {
-      const newTask = { id: '1', name: 'task' };
-      const newTopic = { id: '1', name: 'topic', tasks: [newTask] };
+      const newTask = { id: '1', label: 'task' };
+      const newTopic = { id: '1', label: 'topic', tasks: [newTask] };
       const state = reducer(
         INITIAL_STATE.merge({ items: [newTopic] }),
         deleteTask({ topicId: '1', taskId: '2' }),
@@ -71,20 +74,30 @@ describe('topics', () => {
       expect(state.items[0].tasks.length).to.equal(1);
       expect(state.items[0].tasks[0]).to.deep.equal(newTask);
     });
+
+    it('edits task', () => {
+      const newTask = { id: '1', label: 'task' };
+      const newTopic = { id: '1', label: 'topic', tasks: [newTask] };
+      const state = reducer(
+        INITIAL_STATE.merge({ items: [newTopic] }),
+        editTask({ topicId: '1', taskId: '1', task: { label: 'updated task' } }),
+      );
+      expect(state.items[0].tasks[0].label).to.equal('updated task');
+    });
   });
 
   describe('selectors', () => {
     it('gets tasks for topic', () => {
-      const newTask = { id: '1', name: 'task' };
-      const newTopic = { id: '1', name: 'topic', tasks: [newTask] };
+      const newTask = { id: '1', label: 'task' };
+      const newTopic = { id: '1', label: 'topic', tasks: [newTask] };
       const state = { topics: INITIAL_STATE.merge({ items: [newTopic] }) };
       const tasks = selectTasksFor(state)('1');
       expect(tasks[0]).to.deep.equal(newTask);
     });
 
     it('returns empty array when missing topic id', () => {
-      const newTask = { id: '1', name: 'task' };
-      const newTopic = { id: '1', name: 'topic', tasks: [newTask] };
+      const newTask = { id: '1', label: 'task' };
+      const newTopic = { id: '1', label: 'topic', tasks: [newTask] };
       const state = { topics: INITIAL_STATE.merge({ items: [newTopic] }) };
       const tasks = selectTasksFor(state)();
       expect(tasks.length).to.equal(0);

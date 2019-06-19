@@ -49,7 +49,10 @@ const enhance = compose(
     ],
     items: items.map(item => ({
       ...item,
-      onPress: () => navigation.navigate('Tasks', { topicName: item.label, topicId: item.id }),
+      onPress: () => navigation.navigate('Tasks', {
+        topicName: item.label,
+        topicId: item.id,
+      }),
     })),
   })),
 );

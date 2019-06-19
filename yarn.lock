@@ -7608,6 +7608,11 @@ mocha@^6.1.4:
     yargs-parser "13.0.0"
     yargs-unparser "1.5.0"
 
+moment@^2.24.0:
+  version "2.24.0"
+  resolved "https://registry.npmjs.org/moment/-/moment-2.24.0.tgz#0d055d53f5052aa653c9f6eb68bb5d12bf5c2b5b"
+  integrity sha512-bV7f+6l2QigeBBZSM/6yTNq4P2fNpSWj/0e7jQcy87A8e7o2nAfP/34/2ky5Vw4B9S446EtIhodAzkFCcR4dQg==
+
 morgan@^1.9.0:
   version "1.9.1"
   resolved "https://registry.npmjs.org/morgan/-/morgan-1.9.1.tgz#0a8d16734a1d9afbc824b99df87e738e58e2da59"
@@ -9050,6 +9055,13 @@ react-navigation-drawer@~1.2.1:
   integrity sha512-T2kaBjY2c4/3I6noWFnaf/c18ntNH5DsST38i+pdc2NPxn5Yi5lkK+ZZTeKuHSFD4a7G0jWY9OGf1iRkHWLMAQ==
   dependencies:
     react-native-tab-view "^1.2.0"
+
+react-navigation-props-mapper@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.npmjs.org/react-navigation-props-mapper/-/react-navigation-props-mapper-1.0.1.tgz#f2c619911ab45c927d57fb07a57d94c93570d355"
+  integrity sha512-Za76r2YU2FIDJBU5itGYW9tsHd0SXQlvO5GGu2XJldi8ng/qEoTA3J7hm1aaPMMbrcg08hiOYHljWofw6iQiIA==
+  dependencies:
+    hoist-non-react-statics "^3.3.0"
 
 react-navigation-stack@~1.4.0:
   version "1.4.0"

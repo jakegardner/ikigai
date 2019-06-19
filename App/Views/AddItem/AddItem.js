@@ -1,5 +1,7 @@
 import React from 'react';
 import uuid from 'react-native-uuid';
+import moment from 'moment';
+import { get } from 'lodash';
 import {
   Dimensions,
   View,
@@ -8,6 +10,7 @@ import {
   StyleSheet,
 } from 'react-native';
 import { compose, withProps, withState } from 'recompose';
+import { withMappedNavigationParams } from 'react-navigation-props-mapper';
 import ButtonBar from '../../Components/ButtonBar';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('screen');
@@ -45,45 +48,58 @@ const FormInput = ({ label, children }) => (
   </View>
 );
 
-const AddForm = ({ topicName, setName }) => (
+const AddForm = ({ topicName, setName, name, date }) => (
   <View style={styles.formContainer}>
-    <FormInput label={'Name'} >
-      <TextInput style={styles.textInput} onChangeText={setName} />
+    <FormInput label={'Name'}>
+      <TextInput style={styles.textInput} onChangeText={setName} value={name} />
     </FormInput>
     {topicName && <FormInput label={'Date'}>
+      <Text>{date.format('M/D/YY')}</Text>
     </FormInput>}
     {topicName && <FormInput label={'Repeat'} />}
-    {topicName && <FormInput label={'Topic'}>
-      <Text style={styles.label}>{topicName}</Text>
-    </FormInput>}
   </View>
 );
 
-const AddItem = ({ buttons, topicName, setName }) => (
+const AddItem = ({ buttons, topicName, date, setName, name }) => (
   <View style={styles.container}>
     <AddForm
       topicName={topicName}
       setName={setName}
+      name={name}
+      date={date}
     />
     <ButtonBar buttons={buttons} />
   </View>
 );
 
 const enhance = compose(
-  withState('name', 'setName'),
+  withMappedNavigationParams(),
+  withState('name', 'setName', ({ task }) => get(task, 'label')),
+  withState('date', 'setDate', ({ task }) => moment.utc(get(task, 'date')) || moment.utc()),
   withProps(({
     navigation,
     addTopic,
     addTask,
+    editTask,
     name,
+    task,
+    topicId,
   }) => ({
     buttons: [
       { label: 'Cancel', onPress: () => navigation.goBack() },
       {
         label: 'Save',
         onPress: () => {
-          const topicId = navigation.getParam('topicId');
-          if (topicId) {
+          if (task) {
+            const { id: taskId } = task;
+            editTask({
+              topicId: task.topicId,
+              taskId,
+              task: {
+                label: name,
+              },
+            });
+          } else if (topicId) {
             addTask({
               topicId,
               task: {
@@ -106,8 +122,10 @@ const enhance = compose(
 );
 
 const wrapped = enhance(AddItem);
-wrapped.navigationOptions = {
-  title: 'New Item',
-};
+wrapped.navigationOptions = ({ navigation }) => ({
+  title: (navigation.getParam('task') && `Edit ${navigation.getParam('task').label}`)
+    || (navigation.getParam('topicName') && `New task for ${navigation.getParam('topicName')}`)
+    || 'New Topic',
+});
 
 export default wrapped;
