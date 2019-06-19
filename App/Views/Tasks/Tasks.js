@@ -1,11 +1,16 @@
 import React from 'react';
-import { Dimensions, Text, View, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
+import {
+  Dimensions,
+  Text,
+  View,
+  TouchableOpacity,
+  StyleSheet,
+} from 'react-native';
 import { compose, withProps } from 'recompose';
-import NavigationBar from '../../Components/NavigationBar';
-import ButtonBar from '../../Components/ButtonBar';
 import ListView from '../../Components/ListView';
+import NavigationButton from '../../Components/NavigationButton';
 
-const { width: screenWidth, height: screenHeight } = Dimensions.get('screen');
+const { width: screenWidth } = Dimensions.get('screen');
 
 const styles = StyleSheet.create({
   rowContainer: {
@@ -29,7 +34,7 @@ const TaskRow = ({ label, onPress }) => (
   </TouchableOpacity>
 );
 
-const Tasks = ({ topicName, items, navButtons, buttons }) => (
+const Tasks = ({ items, navButtons, buttons }) => (
   <ListView
     items={items}
     ItemRenderer={TaskRow}
@@ -41,15 +46,20 @@ const Tasks = ({ topicName, items, navButtons, buttons }) => (
 const enhance = compose(
   withProps(({ navigation }) => ({
     buttons: [
-      { label: 'Today', onPress: () => navigation.navigate('Today') },
       { label: 'Topics', onPress: () => navigation.navigate('Topics') },
     ],
   })),
 );
 
 const wrapped = enhance(Tasks);
-wrapped.navigationOptions = {
-  title: 'Tasks',
-};
+wrapped.navigationOptions = ({ navigation }) => ({
+  title: navigation.getParam('topicName'),
+  headerRight: (
+    <NavigationButton
+      label="Add"
+      onPress={() => navigation.navigate('AddItem', { topicId: navigation.getParam('topicId') })}
+    />
+  ),
+});
 
 export default wrapped;

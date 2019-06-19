@@ -3,10 +3,12 @@ import { compose } from 'recompose';
 import AddItem from './AddItem';
 import {
   addTopic,
+  addTask,
 } from '../Topics/duck';
 
 const mapDispatchToProps = {
   addTopic,
+  addTask,
 };
 
 const enhance = compose(

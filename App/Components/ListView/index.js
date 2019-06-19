@@ -1,7 +1,13 @@
 import React from 'react';
-import { Dimensions, Text, View, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
-import NavigationBar from '../../Components/NavigationBar';
-import ButtonBar from '../../Components/ButtonBar';
+import {
+  Dimensions,
+  Text,
+  View,
+  FlatList,
+  TouchableOpacity,
+  StyleSheet,
+} from 'react-native';
+import ButtonBar from '../ButtonBar';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('screen');
 
@@ -41,7 +47,7 @@ const ListRenderer = ({ items, ItemRenderer }) => (
   </View>
 );
 
-const ListView = ({ title, navButtons, items, ItemRenderer, buttons }) => (
+const ListView = ({ items, ItemRenderer, buttons }) => (
   <View>
     <ListRenderer
       items={items}

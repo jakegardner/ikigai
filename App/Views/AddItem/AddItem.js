@@ -71,17 +71,34 @@ const AddItem = ({ buttons, topicName, setName }) => (
 
 const enhance = compose(
   withState('name', 'setName'),
-  withProps(({ navigation, addTopic, name }) => ({
+  withProps(({
+    navigation,
+    addTopic,
+    addTask,
+    name,
+  }) => ({
     buttons: [
       { label: 'Cancel', onPress: () => navigation.goBack() },
       {
         label: 'Save',
         onPress: () => {
-          addTopic({
-            id: uuid.v4(),
-            label: name,
-          });
-          navigation.navigate('Topics');
+          const topicId = navigation.getParam('topicId');
+          if (topicId) {
+            addTask({
+              topicId,
+              task: {
+                label: name,
+                id: uuid.v4(),
+              },
+            });
+          } else {
+            addTopic({
+              id: uuid.v4(),
+              label: name,
+              tasks: [],
+            });
+          }
+          navigation.goBack();
         },
       },
     ],
