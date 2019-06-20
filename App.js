@@ -1,9 +1,10 @@
 import React from 'react';
 import { Provider } from 'react-redux';
-import store from './App/Store';
-
-// import StorybookUI from './storybook';
+import createStore from './App/Store';
 import AppNavigator from './AppNavigator';
+// import StorybookUI from './storybook';
+
+const { store } = createStore();
 
 const App = () => (
   <Provider store={store}>
