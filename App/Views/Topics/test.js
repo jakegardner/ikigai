@@ -1,5 +1,6 @@
 /* eslint-disable import/no-extraneous-dependencies, no-undef */
 import { expect } from 'chai';
+import moment from 'moment';
 
 import reducer, {
   INITIAL_STATE,
@@ -9,6 +10,7 @@ import reducer, {
   deleteTask,
   editTask,
   selectTasksFor,
+  selectTodayTasks,
 } from './duck';
 
 describe('topics', () => {
@@ -101,6 +103,17 @@ describe('topics', () => {
       const state = { topics: INITIAL_STATE.merge({ items: [newTopic] }) };
       const tasks = selectTasksFor(state)();
       expect(tasks.length).to.equal(0);
+    });
+
+    it('gets all tasks for today', () => {
+      const todayTask = { id: '1', label: 'today', date: moment.utc() };
+      const yesterdayTask = { id: '2', label: 'today', date: moment.utc().subtract(1, 'days') };
+      const newTopic = { id: '1', label: 'topic', tasks: [todayTask, yesterdayTask] };
+      const state = { topics: INITIAL_STATE.merge({ items: [newTopic] }) };
+      const tasks = selectTodayTasks(state);
+      expect(tasks.length).to.equal(1);
+      expect(tasks[0].id).to.equal('1');
+      expect(tasks[0].label).to.equal('today');
     });
   });
 });

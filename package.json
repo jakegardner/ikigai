@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
+    "lint": "./node_modules/.bin/eslint .",
     "start": "node node_modules/react-native/local-cli/cli.js start",
     "storybook": "storybook start",
     "test": "mocha --require ./__tests__/babel-polyfill.js './App/**/test.js'"

@@ -1,6 +1,7 @@
 import Immutable from 'seamless-immutable';
 import { createDuck } from 'redux-duck';
 import { createSelector } from 'reselect';
+import moment from 'moment';
 
 const topicsDuck = createDuck('topics');
 
@@ -71,14 +72,25 @@ const reducer = topicsDuck.createReducer({
   },
 }, INITIAL_STATE);
 
+const selectTopics = state => state.topics.items;
+
 export const selectTasksFor = createSelector(
-  state => state.topics.items,
+  selectTopics,
   topics => (topicId) => {
     if (!topicId) {
       return [];
     }
     const topic = topics.find(item => item.id === topicId);
     return topic.tasks;
+  },
+);
+
+export const selectTodayTasks = createSelector(
+  selectTopics,
+  (topics) => {
+    const allTasks = topics.flatMap(topic => topic.tasks);
+    const formatter = mom => moment.utc(mom).locale('en').format('MDYYYY');
+    return allTasks.filter(task => formatter(task.date) === formatter(moment.utc()));
   },
 );
 
