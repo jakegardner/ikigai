@@ -48,19 +48,32 @@ const FormInput = ({ label, children }) => (
   </View>
 );
 
-const AddForm = ({ topicName, setName, name, date }) => (
+const AddForm = ({
+  topicName,
+  setName,
+  name,
+  date,
+}) => (
   <View style={styles.formContainer}>
-    <FormInput label={'Name'}>
+    <FormInput label="Name">
       <TextInput style={styles.textInput} onChangeText={setName} value={name} />
     </FormInput>
-    {topicName && <FormInput label={'Date'}>
-      <Text>{date.format('M/D/YY')}</Text>
-    </FormInput>}
-    {topicName && <FormInput label={'Repeat'} />}
+    {topicName && (
+      <FormInput label="Date">
+        <Text>{date.format('M/D/YY')}</Text>
+      </FormInput>
+    )}
+    {topicName && <FormInput label="Repeat" />}
   </View>
 );
 
-const AddItem = ({ buttons, topicName, date, setName, name }) => (
+const AddItem = ({
+  buttons,
+  topicName,
+  date,
+  setName,
+  name,
+}) => (
   <View style={styles.container}>
     <AddForm
       topicName={topicName}

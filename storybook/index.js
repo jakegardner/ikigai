@@ -1,6 +1,5 @@
-import { AppRegistry } from 'react-native';
+/* eslint-disable global-require, import/no-extraneous-dependencies */
 import { getStorybookUI, configure } from '@storybook/react-native';
-import { name as appName } from '../app.json';
 
 import './rn-addons';
 

@@ -3,7 +3,6 @@ import {
   Dimensions,
   Text,
   View,
-  FlatList,
   TouchableOpacity,
   StyleSheet,
 } from 'react-native';
@@ -11,7 +10,7 @@ import { compose, withProps } from 'recompose';
 
 import ListView from '../../Components/ListView';
 
-const { width: screenWidth, height: screenHeight } = Dimensions.get('screen');
+const { width: screenWidth } = Dimensions.get('screen');
 
 const styles = StyleSheet.create({
   rowContainer: {
