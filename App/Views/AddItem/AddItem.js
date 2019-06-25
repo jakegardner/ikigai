@@ -7,11 +7,20 @@ import {
   View,
   TextInput,
   Text,
+  TouchableOpacity,
   StyleSheet,
+  Modal,
 } from 'react-native';
-import { compose, withProps, withState } from 'recompose';
+import { CalendarList } from 'react-native-calendars';
+import {
+  compose,
+  withProps,
+  withState,
+  withHandlers,
+} from 'recompose';
 import { withMappedNavigationParams } from 'react-navigation-props-mapper';
 import ButtonBar from '../../Components/ButtonBar';
+import { isIphoneX } from '../../Common/util';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('screen');
 
@@ -39,6 +48,19 @@ const styles = StyleSheet.create({
     lineHeight: 18,
     width: 250,
   },
+  modalBackground: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'rgba(0, 0, 0, 0.3)',
+  },
+  modalContainer: {
+    marginTop: 83 + (isIphoneX ? 44 : 0),
+    height: screenHeight - 123 - (isIphoneX ? 84 : 0),
+    width: screenWidth,
+  },
 });
 
 const FormInput = ({ label, children }) => (
@@ -53,6 +75,7 @@ const AddForm = ({
   setName,
   name,
   date,
+  setCalendarModalVisible,
 }) => (
   <View style={styles.formContainer}>
     <FormInput label="Name">
@@ -60,7 +83,9 @@ const AddForm = ({
     </FormInput>
     {topicName && (
       <FormInput label="Date">
-        <Text>{date.format('M/D/YY')}</Text>
+        <TouchableOpacity onPress={() => setCalendarModalVisible(true)}>
+          <Text>{moment.utc(date).format('YYYY-MM-DD')}</Text>
+        </TouchableOpacity>
       </FormInput>
     )}
     {topicName && <FormInput label="Repeat" />}
@@ -73,6 +98,10 @@ const AddItem = ({
   date,
   setName,
   name,
+  calendarModalVisible,
+  setCalendarModalVisible,
+  onDayPress,
+  onRequestClose,
 }) => (
   <View style={styles.container}>
     <AddForm
@@ -80,8 +109,24 @@ const AddItem = ({
       setName={setName}
       name={name}
       date={date}
+      setCalendarModalVisible={setCalendarModalVisible}
     />
     <ButtonBar buttons={buttons} />
+    <Modal
+      animationType="slide"
+      transparent
+      visible={calendarModalVisible}
+      onRequestClose={onRequestClose}
+    >
+      <View style={styles.modalBackground} />
+      <View style={styles.modalContainer}>
+        <CalendarList
+          current={moment.utc(date).format('YYYY-MM-DD')}
+          minDate={new Date()}
+          onDayPress={onDayPress}
+        />
+      </View>
+    </Modal>
   </View>
 );
 
@@ -89,6 +134,7 @@ const enhance = compose(
   withMappedNavigationParams(),
   withState('name', 'setName', ({ task }) => get(task, 'label')),
   withState('date', 'setDate', ({ task }) => moment.utc(get(task, 'date')) || moment.utc()),
+  withState('calendarModalVisible', 'setCalendarModalVisible', false),
   withProps(({
     navigation,
     addTopic,
@@ -132,6 +178,13 @@ const enhance = compose(
       },
     ],
   })),
+  withHandlers({
+    onRequestClose: ({ setCalendarModalVisible }) => () => setCalendarModalVisible(false),
+    onDayPress: ({ setCalendarModalVisible, setDate }) => (day) => {
+      setDate(day.timestamp);
+      setCalendarModalVisible(false);
+    },
+  }),
 );
 
 const wrapped = enhance(AddItem);

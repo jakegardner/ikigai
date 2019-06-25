@@ -21,6 +21,7 @@
         "react/jsx-filename-extension": "off",
         "implicit-arrow-linebreak": "off",
         "no-console": "off",
-        "react/prop-types": "off"
+        "react/prop-types": "off",
+        "import/prefer-default-export": "off"
     }
 }
