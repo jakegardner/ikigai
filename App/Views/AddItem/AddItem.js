@@ -142,6 +142,7 @@ const enhance = compose(
     editTask,
     name,
     task,
+    date,
     topicId,
   }) => ({
     buttons: [
@@ -156,6 +157,7 @@ const enhance = compose(
               taskId,
               task: {
                 label: name,
+                date,
               },
             });
           } else if (topicId) {
