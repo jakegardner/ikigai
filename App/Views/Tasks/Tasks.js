@@ -3,7 +3,7 @@ import {
   Dimensions,
   Text,
   View,
-  TouchableOpacity,
+  TouchableHighlight,
   StyleSheet,
 } from 'react-native';
 import { compose, withProps } from 'recompose';
@@ -20,6 +20,7 @@ const styles = StyleSheet.create({
     height: 50,
     borderBottomWidth: StyleSheet.hairlineWidth,
     borderBottomColor: '#EFEFEF',
+    backgroundColor: '#FFFFFF',
   },
   rowLabel: {
     fontSize: 16,
@@ -27,11 +28,11 @@ const styles = StyleSheet.create({
 });
 
 const TaskRow = ({ label, onPress }) => (
-  <TouchableOpacity onPress={onPress} style={styles.rowContainer}>
+  <TouchableHighlight onPress={onPress} style={styles.rowContainer} underlayColor="#EFEFEF">
     <View>
       <Text style={styles.rowLabel}>{label}</Text>
     </View>
-  </TouchableOpacity>
+  </TouchableHighlight>
 );
 
 const Tasks = ({ items, navButtons, buttons }) => (
@@ -44,32 +45,21 @@ const Tasks = ({ items, navButtons, buttons }) => (
 );
 
 const enhance = compose(
-  withProps(({ navigation, items }) => ({
+  withProps(({
+    navigation,
+    items,
+    onTaskPress,
+    onDeletePress,
+  }) => ({
     buttons: [
       { label: 'Topics', onPress: () => navigation.navigate('Topics') },
     ],
     items: items.map(item => ({
       ...item,
-      onPress: () => navigation.navigate('AddItem', {
-        task: item,
-        topicName: navigation.getParam('topicName'),
-      }),
+      onPress: () => onTaskPress(item),
+      onDelete: () => onDeletePress(item),
     })),
   })),
 );
 
-const wrapped = enhance(Tasks);
-wrapped.navigationOptions = ({ navigation }) => ({
-  title: navigation.getParam('topicName'),
-  headerRight: (
-    <NavigationButton
-      label="Add"
-      onPress={() => navigation.navigate('AddItem', {
-        topicId: navigation.getParam('topicId'),
-        topicName: navigation.getParam('topicName'),
-      })}
-    />
-  ),
-});
-
-export default wrapped;
+export default enhance(Tasks);

@@ -3,7 +3,7 @@ import {
   Dimensions,
   Text,
   View,
-  TouchableOpacity,
+  TouchableHighlight,
   StyleSheet,
 } from 'react-native';
 import { compose, withProps } from 'recompose';
@@ -20,6 +20,7 @@ const styles = StyleSheet.create({
     height: 50,
     borderBottomWidth: StyleSheet.hairlineWidth,
     borderBottomColor: '#EFEFEF',
+    backgroundColor: '#FFFFFF',
   },
   rowLabel: {
     fontSize: 16,
@@ -27,11 +28,11 @@ const styles = StyleSheet.create({
 });
 
 const TodayRow = ({ label, onPress }) => (
-  <TouchableOpacity onPress={onPress} style={styles.rowContainer}>
+  <TouchableHighlight onPress={onPress} style={styles.rowContainer} underlayColor="#EFEFEF">
     <View>
       <Text style={styles.rowLabel}>{label}</Text>
     </View>
-  </TouchableOpacity>
+  </TouchableHighlight>
 );
 
 const Today = ({ items, navButtons, buttons }) => (
@@ -44,11 +45,20 @@ const Today = ({ items, navButtons, buttons }) => (
 );
 
 const enhance = compose(
-  withProps(({ navigation, items, onTaskPress }) => ({
+  withProps(({
+    navigation,
+    items,
+    onTaskPress,
+    onDeletePress,
+  }) => ({
     buttons: [
       { label: 'Topics', onPress: () => navigation.navigate('Topics') },
     ],
-    items: items.map(item => ({ ...item, onPress: () => onTaskPress(item) })),
+    items: items.map(item => ({
+      ...item,
+      onPress: () => onTaskPress(item),
+      onDelete: () => onDeletePress(item),
+    })),
   })),
 );
 

@@ -9019,6 +9019,11 @@ react-native-swipe-gestures@^1.0.2:
   resolved "https://registry.npmjs.org/react-native-swipe-gestures/-/react-native-swipe-gestures-1.0.3.tgz#4160f8d459627323f3a3d2770af4bcd82fd054f5"
   integrity sha512-KOouRzPB2fHFjVombsSdRfYo8SFeNVa4Ho4B5il87DuuF26sPNOtb3je+qaT/xVptedOsCzRPJGbWFMsaBApgg==
 
+react-native-swipe-list-view@^1.5.7:
+  version "1.5.7"
+  resolved "https://registry.npmjs.org/react-native-swipe-list-view/-/react-native-swipe-list-view-1.5.7.tgz#102162058616545fb3a875e113ba1f94b34708ac"
+  integrity sha512-BZmcYF52thYz7DnIsQmbbc02ivTaQeJybXniG7FOMm71j/+GRfwjJjNt2QPtvnjcBc162Ht8fbepj67AEzXbrA==
+
 react-native-switch@^1.5.0:
   version "1.5.0"
   resolved "https://registry.npmjs.org/react-native-switch/-/react-native-switch-1.5.0.tgz#a5c8e72f87def649d1c9de027c5ae27e2037ea40"

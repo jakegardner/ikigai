@@ -3,10 +3,10 @@ import {
   Dimensions,
   Text,
   View,
-  FlatList,
   TouchableOpacity,
   StyleSheet,
 } from 'react-native';
+import { SwipeListView } from 'react-native-swipe-list-view';
 import ButtonBar from '../ButtonBar';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('screen');
@@ -23,9 +23,26 @@ const styles = StyleSheet.create({
     height: 50,
     borderBottomWidth: StyleSheet.hairlineWidth,
     borderBottomColor: '#EFEFEF',
+    backgroundColor: '#FFFFFF',
   },
   rowLabel: {
     fontSize: 16,
+  },
+  underRow: {
+    backgroundColor: '#FFFFFF',
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+  },
+  deleteButton: {
+    backgroundColor: '#FF0000',
+    width: 75,
+    height: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  underlayButtonText: {
+    fontSize: 16,
+    color: '#FFFFFF',
   },
 });
 
@@ -39,10 +56,22 @@ const DefaultRowRenderer = ({ label, onPress }) => (
 
 const ListRenderer = ({ items, ItemRenderer }) => (
   <View style={styles.listContainer}>
-    <FlatList
+    <SwipeListView
+      useFlatList
       data={items}
-      keyExtractor={({ id }) => id}
       renderItem={({ index, item }) => <ItemRenderer {...item} index={index} />}
+      renderHiddenItem={({ item }) => (
+        <View style={styles.underRow}>
+          <TouchableOpacity onPress={item.onDelete}>
+            <View style={styles.deleteButton}>
+              <Text style={styles.underlayButtonText}>Delete</Text>
+            </View>
+          </TouchableOpacity>
+        </View>
+      )}
+      leftOpenValue={75}
+      rightOpenValue={-150}
+      disableRightSwipe
     />
   </View>
 );

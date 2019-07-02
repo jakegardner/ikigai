@@ -46,7 +46,7 @@ const reducer = topicsDuck.createReducer({
     );
   },
   [DELETE_TASK]: (state, { payload }) => {
-    const { topicId, taskId } = payload;
+    const { topicId, id: taskId } = payload;
     if (!topicId) {
       console.error(`${DELETE_TASK} missing topic id`);
       return state;
