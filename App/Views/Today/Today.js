@@ -44,16 +44,12 @@ const Today = ({ items, navButtons, buttons }) => (
 );
 
 const enhance = compose(
-  withProps(({ navigation }) => ({
+  withProps(({ navigation, items, onTaskPress }) => ({
     buttons: [
       { label: 'Topics', onPress: () => navigation.navigate('Topics') },
     ],
+    items: items.map(item => ({ ...item, onPress: () => onTaskPress(item) })),
   })),
 );
 
-const wrapped = enhance(Today);
-wrapped.navigationOptions = {
-  title: 'Today',
-};
-
-export default wrapped;
+export default enhance(Today);

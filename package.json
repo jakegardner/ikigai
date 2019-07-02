@@ -25,6 +25,7 @@
     "recompose": "^0.30.0",
     "redux": "^4.0.1",
     "redux-duck": "^1.0.2",
+    "redux-logger": "^3.0.6",
     "redux-persist": "^5.10.0",
     "redux-persist-filesystem-storage": "^1.3.2",
     "redux-persist-seamless-immutable": "^2.0.0",

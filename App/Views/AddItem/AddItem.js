@@ -151,19 +151,17 @@ const enhance = compose(
         label: 'Save',
         onPress: () => {
           if (task) {
-            const { id: taskId } = task;
             editTask({
-              topicId: task.topicId,
-              taskId,
               task: {
+                ...task,
                 label: name,
                 date,
               },
             });
           } else if (topicId) {
             addTask({
-              topicId,
               task: {
+                topicId,
                 label: name,
                 id: uuid.v4(),
               },

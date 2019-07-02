@@ -11,6 +11,7 @@ import reducer, {
   editTask,
   selectTasksFor,
   selectTodayTasks,
+  toggleTaskComplete,
 } from './duck';
 
 describe('topics', () => {
@@ -46,10 +47,10 @@ describe('topics', () => {
 
     it('adds new task', () => {
       const newTopic = { id: '1', label: 'topic', tasks: [] };
-      const newTask = { id: 'a', label: 'task' };
+      const newTask = { id: 'a', label: 'task', topicId: '1' };
       const state = reducer(
         INITIAL_STATE.merge({ items: [newTopic] }),
-        addTask({ topicId: '1', task: newTask }),
+        addTask({ task: newTask }),
       );
       expect(state.items[0].tasks[0].label).to.equal('task');
       expect(state.items[0].tasks[0].id).to.equal('a');
@@ -78,13 +79,35 @@ describe('topics', () => {
     });
 
     it('edits task', () => {
-      const newTask = { id: '1', label: 'task' };
+      const newTask = { id: '1', topicId: '1', label: 'task' };
       const newTopic = { id: '1', label: 'topic', tasks: [newTask] };
       const state = reducer(
         INITIAL_STATE.merge({ items: [newTopic] }),
-        editTask({ topicId: '1', taskId: '1', task: { label: 'updated task' } }),
+        editTask({ task: { id: '1', topicId: '1', label: 'updated task' } }),
       );
       expect(state.items[0].tasks[0].label).to.equal('updated task');
+    });
+
+    it('toggles task complete status', () => {
+      const newTask = { id: 'a', label: 'task', status: 'incomplete' };
+      const newTopic = { id: '1', label: 'topic', tasks: [newTask] };
+      const state = reducer(
+        INITIAL_STATE.merge({ items: [newTopic] }),
+        toggleTaskComplete({ topicId: '1', taskId: 'a' }),
+      );
+      expect(state.items[0].tasks[0].id).to.equal('a');
+      expect(state.items[0].tasks[0].status).to.equal('complete');
+    });
+
+    it('toggles task incomplete status', () => {
+      const newTask = { id: 'a', label: 'task', status: 'complete' };
+      const newTopic = { id: '1', label: 'topic', tasks: [newTask] };
+      const state = reducer(
+        INITIAL_STATE.merge({ items: [newTopic] }),
+        toggleTaskComplete({ topicId: '1', taskId: 'a' }),
+      );
+      expect(state.items[0].tasks[0].id).to.equal('a');
+      expect(state.items[0].tasks[0].status).to.equal('incomplete');
     });
   });
 

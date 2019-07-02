@@ -41,7 +41,7 @@ const ListRenderer = ({ items, ItemRenderer }) => (
   <View style={styles.listContainer}>
     <FlatList
       data={items}
-      keyExtractor={({ label }) => label}
+      keyExtractor={({ id }) => id}
       renderItem={({ index, item }) => <ItemRenderer {...item} index={index} />}
     />
   </View>

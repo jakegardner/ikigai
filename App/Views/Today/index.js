@@ -1,6 +1,6 @@
-import { compose } from 'recompose';
+import { compose, withHandlers } from 'recompose';
 import { connect } from 'react-redux';
-import { selectTodayTasks } from '../Topics/duck';
+import { selectTodayTasks, toggleTaskComplete } from '../Topics/duck';
 
 import Today from './Today';
 
@@ -9,10 +9,19 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = {
+  dispatchToggleTaskComplete: toggleTaskComplete,
 };
 
 const enhance = compose(
   connect(mapStateToProps, mapDispatchToProps),
+  withHandlers({
+    onTaskPress: ({ dispatchToggleTaskComplete }) => task => dispatchToggleTaskComplete(task),
+  }),
 );
 
-export default enhance(Today);
+const wrapped = enhance(Today);
+wrapped.navigationOptions = {
+  title: 'Today',
+};
+
+export default wrapped;
