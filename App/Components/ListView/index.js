@@ -8,12 +8,13 @@ import {
 } from 'react-native';
 import { SwipeListView } from 'react-native-swipe-list-view';
 import ButtonBar from '../ButtonBar';
+import { isIphoneX } from '../../Common/util';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('screen');
 
 const styles = StyleSheet.create({
   listContainer: {
-    height: screenHeight - 128,
+    height: screenHeight - (isIphoneX ? 128 : 64),
     width: screenWidth,
   },
   rowContainer: {

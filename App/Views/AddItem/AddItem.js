@@ -26,7 +26,7 @@ const { width: screenWidth, height: screenHeight } = Dimensions.get('screen');
 
 const styles = StyleSheet.create({
   container: {
-    height: screenHeight - 128,
+    height: screenHeight - (isIphoneX ? 128 : 64),
     width: screenWidth,
   },
   formContainer: {
