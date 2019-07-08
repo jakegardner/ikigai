@@ -17,9 +17,11 @@ import {
   withProps,
   withState,
   withHandlers,
+  withStateHandlers,
 } from 'recompose';
 import { withMappedNavigationParams } from 'react-navigation-props-mapper';
 import ButtonBar from '../../Components/ButtonBar';
+import RepeatControl from './RepeatControl';
 import { isIphoneX } from '../../Common/util';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('screen');
@@ -34,12 +36,12 @@ const styles = StyleSheet.create({
   },
   formInputContainer: {
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     paddingVertical: 10,
   },
   formInputLabel: {
     fontSize: 14,
-    marginRight: 5,
+    marginRight: 15,
   },
   label: {
     fontSize: 14,
@@ -76,6 +78,11 @@ const AddForm = ({
   name,
   date,
   setCalendarModalVisible,
+  repeat,
+  repeatVisible,
+  setRepeatVisible,
+  toggleDay,
+  setDuration,
 }) => (
   <View style={styles.formContainer}>
     <FormInput label="Name">
@@ -88,7 +95,21 @@ const AddForm = ({
         </TouchableOpacity>
       </FormInput>
     )}
-    {topicName && <FormInput label="Repeat" />}
+    {topicName && (
+      <FormInput label="Repeat">
+        {repeat || repeatVisible ? (
+          <RepeatControl
+            repeat={repeat}
+            toggleDay={toggleDay}
+            setDuration={setDuration}
+          />
+        ) : (
+          <TouchableOpacity onPress={() => setRepeatVisible(true)}>
+            <Text>None</Text>
+          </TouchableOpacity>
+        )}
+      </FormInput>
+    )}
   </View>
 );
 
@@ -101,7 +122,12 @@ const AddItem = ({
   calendarModalVisible,
   setCalendarModalVisible,
   onDayPress,
-  onRequestClose,
+  onRequestCloseCalendar,
+  repeat,
+  repeatVisible,
+  setRepeatVisible,
+  toggleDay,
+  setDuration,
 }) => (
   <View style={styles.container}>
     <AddForm
@@ -110,13 +136,18 @@ const AddItem = ({
       name={name}
       date={date}
       setCalendarModalVisible={setCalendarModalVisible}
+      repeat={repeat}
+      repeatVisible={repeatVisible}
+      setRepeatVisible={setRepeatVisible}
+      toggleDay={toggleDay}
+      setDuration={setDuration}
     />
     <ButtonBar buttons={buttons} />
     <Modal
       animationType="slide"
       transparent
       visible={calendarModalVisible}
-      onRequestClose={onRequestClose}
+      onRequestCloseCalendar={onRequestCloseCalendar}
     >
       <View style={styles.modalBackground} />
       <View style={styles.modalContainer}>
@@ -134,7 +165,25 @@ const enhance = compose(
   withMappedNavigationParams(),
   withState('name', 'setName', ({ task }) => get(task, 'label')),
   withState('date', 'setDate', ({ task }) => moment.utc(get(task, 'date')) || moment.utc()),
+  withState('repeat', 'setRepeat', ({ task }) => get(task, 'repeat')),
   withState('calendarModalVisible', 'setCalendarModalVisible', false),
+  withState('repeatVisible', 'setRepeatVisible', false),
+  withStateHandlers(
+    ({ repeat }) => ({
+      days: repeat ? repeat.days : Array(7).fill(false),
+      duration: repeat ? repeat.duration : null,
+    }),
+    {
+      toggleDay: ({ days }) => (index) => {
+        const newDays = [...days];
+        newDays[index] = !days[index];
+        return { days: newDays };
+      },
+      setDuration: () => value => ({
+        duration: value,
+      }),
+    },
+  ),
   withProps(({
     navigation,
     addTopic,
@@ -143,6 +192,8 @@ const enhance = compose(
     name,
     task,
     date,
+    days,
+    duration,
     topicId,
   }) => ({
     buttons: [
@@ -156,6 +207,10 @@ const enhance = compose(
                 ...task,
                 label: name,
                 date,
+                repeat: {
+                  days,
+                  duration,
+                },
               },
             });
           } else if (topicId) {
@@ -164,6 +219,10 @@ const enhance = compose(
                 topicId,
                 label: name,
                 id: uuid.v4(),
+                repeat: {
+                  days,
+                  duration,
+                },
               },
             });
           } else {
@@ -179,7 +238,8 @@ const enhance = compose(
     ],
   })),
   withHandlers({
-    onRequestClose: ({ setCalendarModalVisible }) => () => setCalendarModalVisible(false),
+    onRequestCloseCalendar: ({ setCalendarModalVisible }) => () => setCalendarModalVisible(false),
+    onRequestCloseRepeat: ({ setRepeatVisible }) => () => setRepeatVisible(false),
     onDayPress: ({ setCalendarModalVisible, setDate }) => (day) => {
       setDate(day.timestamp);
       setCalendarModalVisible(false);

@@ -62,7 +62,7 @@ describe('topics', () => {
       const newTopic = { id: '1', label: 'topic', tasks: [newTask] };
       const state = reducer(
         INITIAL_STATE.merge({ items: [newTopic] }),
-        deleteTask({ topicId: '1', taskId: '1' }),
+        deleteTask({ topicId: '1', id: '1' }),
       );
       expect(state.items[0].tasks.length).to.equal(0);
     });
@@ -72,7 +72,7 @@ describe('topics', () => {
       const newTopic = { id: '1', label: 'topic', tasks: [newTask] };
       const state = reducer(
         INITIAL_STATE.merge({ items: [newTopic] }),
-        deleteTask({ topicId: '1', taskId: '2' }),
+        deleteTask({ topicId: '1', id: '2' }),
       );
       expect(state.items[0].tasks.length).to.equal(1);
       expect(state.items[0].tasks[0]).to.deep.equal(newTask);
@@ -93,7 +93,7 @@ describe('topics', () => {
       const newTopic = { id: '1', label: 'topic', tasks: [newTask] };
       const state = reducer(
         INITIAL_STATE.merge({ items: [newTopic] }),
-        toggleTaskComplete({ topicId: '1', taskId: 'a' }),
+        toggleTaskComplete({ topicId: '1', id: 'a' }),
       );
       expect(state.items[0].tasks[0].id).to.equal('a');
       expect(state.items[0].tasks[0].status).to.equal('complete');
@@ -104,7 +104,7 @@ describe('topics', () => {
       const newTopic = { id: '1', label: 'topic', tasks: [newTask] };
       const state = reducer(
         INITIAL_STATE.merge({ items: [newTopic] }),
-        toggleTaskComplete({ topicId: '1', taskId: 'a' }),
+        toggleTaskComplete({ topicId: '1', id: 'a' }),
       );
       expect(state.items[0].tasks[0].id).to.equal('a');
       expect(state.items[0].tasks[0].status).to.equal('incomplete');
