@@ -1,6 +1,7 @@
 /* eslint-disable import/no-extraneous-dependencies, no-undef */
 import { expect } from 'chai';
 import moment from 'moment';
+import MockDate from 'mockdate';
 
 import reducer, {
   INITIAL_STATE,
@@ -13,6 +14,7 @@ import reducer, {
   selectTodayTasks,
   toggleTaskComplete,
 } from './duck';
+
 
 describe('topics', () => {
   describe('reducer', () => {
@@ -137,6 +139,69 @@ describe('topics', () => {
       expect(tasks.length).to.equal(1);
       expect(tasks[0].id).to.equal('1');
       expect(tasks[0].label).to.equal('today');
+    });
+
+    it('gets task for today according to one week schedule', () => {
+      MockDate.set(moment.utc('7/2/2019')); // Tuesday
+
+      const todayTask = {
+        id: '1',
+        label: 'tuesday task',
+        date: moment.utc('2019-06-30'), // Sunday
+        repeat: {
+          days: [false, false, true, false, true, false, false], // Tue-Thu task
+          duration: 'week',
+        },
+      };
+      const newTopic = { id: '1', label: 'topic', tasks: [todayTask] };
+      const state = { topics: INITIAL_STATE.merge({ items: [newTopic] }) };
+      const tasks = selectTodayTasks(state);
+
+      expect(tasks.length).to.equal(1);
+      expect(tasks[0].id).to.equal('1');
+      expect(tasks[0].label).to.equal('tuesday task');
+
+      MockDate.reset();
+    });
+
+    it('gets task for today according to infinite schedule', () => {
+      MockDate.set(moment.utc('7/4/2019')); // Thursday
+
+      const todayTask = {
+        id: '1',
+        label: 'thursday task',
+        date: moment.utc('2019-02-01'),
+        repeat: {
+          days: [false, false, true, false, true, false, false], // Tue-Thu task
+          duration: 'infinite',
+        },
+      };
+      const newTopic = { id: '1', label: 'topic', tasks: [todayTask] };
+      const state = { topics: INITIAL_STATE.merge({ items: [newTopic] }) };
+      const tasks = selectTodayTasks(state);
+
+      expect(tasks.length).to.equal(1);
+      expect(tasks[0].id).to.equal('1');
+      expect(tasks[0].label).to.equal('thursday task');
+
+      MockDate.reset();
+    });
+
+    it('gets no task when missing repeat', () => {
+      MockDate.set(moment.utc('7/4/2019')); // Thursday
+
+      const todayTask = {
+        id: '1',
+        label: 'thursday task',
+        date: moment.utc('2019-02-01'),
+      };
+      const newTopic = { id: '1', label: 'topic', tasks: [todayTask] };
+      const state = { topics: INITIAL_STATE.merge({ items: [newTopic] }) };
+      const tasks = selectTodayTasks(state);
+
+      expect(tasks.length).to.equal(0);
+
+      MockDate.reset();
     });
   });
 });

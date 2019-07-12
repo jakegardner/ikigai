@@ -1,6 +1,7 @@
 import Immutable from 'seamless-immutable';
 import { createDuck } from 'redux-duck';
 import { createSelector } from 'reselect';
+import { some } from 'lodash';
 import moment from 'moment';
 
 const topicsDuck = createDuck('topics');
@@ -112,7 +113,26 @@ export const selectTodayTasks = createSelector(
   (topics) => {
     const allTasks = topics.flatMap(topic => topic.tasks);
     const formatter = mom => moment.utc(mom).locale('en').format('MDYYYY');
-    return allTasks.filter(task => formatter(task.date) === formatter(moment.utc()));
+    return allTasks.filter((task) => {
+      const now = moment.utc();
+      const isSameDayTask = formatter(task.date) === formatter(now);
+
+      const { repeat } = task;
+      if (repeat && moment.utc(task.date).isBefore(now)) {
+        const { days, duration } = repeat;
+        const matchesDayOfWeek = some(
+          days,
+          (daySelected, index) => daySelected && index === now.day(),
+        );
+        if (duration === 'infinite') {
+          return matchesDayOfWeek;
+        }
+        if (duration === 'week' && now.isBefore(moment.utc(task.date).add(1, 'week'))) {
+          return matchesDayOfWeek;
+        }
+      }
+      return isSameDayTask;
+    });
   },
 );
 
