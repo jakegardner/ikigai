@@ -8,7 +8,6 @@ import {
 } from 'react-native';
 import { compose, withProps } from 'recompose';
 import ListView from '../../Components/ListView';
-import NavigationButton from '../../Components/NavigationButton';
 
 const { width: screenWidth } = Dimensions.get('screen');
 
