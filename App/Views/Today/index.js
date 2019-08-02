@@ -5,6 +5,7 @@ import {
   toggleTaskComplete,
   deleteTask,
 } from '../Topics/duck';
+import { headerStyles } from '../../Common/styles';
 
 import Today from './Today';
 
@@ -28,6 +29,7 @@ const enhance = compose(
 const wrapped = enhance(Today);
 wrapped.navigationOptions = {
   title: 'Today',
+  ...headerStyles,
 };
 
 export default wrapped;

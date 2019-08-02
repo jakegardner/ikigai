@@ -6,7 +6,8 @@ import {
   selectTasksFor,
   deleteTask,
 } from '../Topics/duck';
-import NavigationButton from '../../Components/NavigationButton';
+import { AddButton, BackButton } from '../../Components/NavigationButton';
+import { headerStyles } from '../../Common/styles';
 
 const mapStateToProps = (state, { navigation }) => ({
   items: selectTasksFor(state)(navigation.getParam('topicId')),
@@ -30,15 +31,20 @@ const enhance = compose(
 const wrapped = enhance(Tasks);
 wrapped.navigationOptions = ({ navigation }) => ({
   title: navigation.getParam('topicName'),
+  headerLeft: (
+    <BackButton
+      onPress={() => navigation.goBack()}
+    />
+  ),
   headerRight: (
-    <NavigationButton
-      label="Add"
+    <AddButton
       onPress={() => navigation.navigate('AddItem', {
         topicId: navigation.getParam('topicId'),
         topicName: navigation.getParam('topicName'),
       })}
     />
   ),
+  ...headerStyles,
 });
 
 export default wrapped;

@@ -3,45 +3,57 @@ import {
   Dimensions,
   Text,
   View,
-  TouchableHighlight,
+  TouchableOpacity,
   StyleSheet,
+  StatusBar,
+  Image,
 } from 'react-native';
 import { compose, withProps } from 'recompose';
-
+import { defaultFont } from '../../Common/font';
 import ListView from '../../Components/ListView';
+
+import completePng from '../../Assets/done.png';
+import incompletePng from '../../Assets/incomplete.png';
 
 const { width: screenWidth } = Dimensions.get('screen');
 
 const styles = StyleSheet.create({
   rowContainer: {
     width: screenWidth,
-    paddingLeft: 15,
-    justifyContent: 'center',
+    paddingHorizontal: 15,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     height: 50,
-    borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: '#EFEFEF',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: 'transparent',
   },
   rowLabel: {
     fontSize: 16,
+    fontFamily: defaultFont,
+    color: '#FFFFFF',
+    paddingTop: 1,
   },
 });
 
-const TodayRow = ({ label, onPress }) => (
-  <TouchableHighlight onPress={onPress} style={styles.rowContainer} underlayColor="#EFEFEF">
-    <View>
+const TodayRow = ({ label, status, onPress }) => (
+  <TouchableOpacity onPress={onPress}>
+    <View style={styles.rowContainer}>
       <Text style={styles.rowLabel}>{label}</Text>
+      <Image source={status === 'complete' ? completePng : incompletePng} />
     </View>
-  </TouchableHighlight>
+  </TouchableOpacity>
 );
 
 const Today = ({ items, navButtons, buttons }) => (
-  <ListView
-    items={items}
-    ItemRenderer={TodayRow}
-    navButtons={navButtons}
-    buttons={buttons}
-  />
+  <React.Fragment>
+    <StatusBar barStyle="light-content" />
+    <ListView
+      items={items}
+      ItemRenderer={TodayRow}
+      navButtons={navButtons}
+      buttons={buttons}
+    />
+  </React.Fragment>
 );
 
 const enhance = compose(

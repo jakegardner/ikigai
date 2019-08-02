@@ -6,9 +6,12 @@ import {
   TouchableOpacity,
   StyleSheet,
 } from 'react-native';
+import LinearGradient from 'react-native-linear-gradient';
 import { SwipeListView } from 'react-native-swipe-list-view';
 import ButtonBar from '../ButtonBar';
 import { isIphoneX } from '../../Common/util';
+import { defaultFont } from '../../Common/font';
+import { bgGradient } from '../../Common/styles';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('screen');
 
@@ -22,15 +25,15 @@ const styles = StyleSheet.create({
     paddingLeft: 15,
     justifyContent: 'center',
     height: 50,
-    borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: '#EFEFEF',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: 'transparent',
   },
   rowLabel: {
-    fontSize: 16,
+    fontFamily: defaultFont,
+    fontSize: 14,
+    color: '#FFFFFF',
   },
   underRow: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: 'transparent',
     flexDirection: 'row',
     justifyContent: 'flex-end',
   },
@@ -42,10 +45,25 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   underlayButtonText: {
-    fontSize: 16,
+    fontFamily: defaultFont,
+    fontSize: 12,
+    paddingTop: 2,
     color: '#FFFFFF',
+    textTransform: 'uppercase',
+  },
+  linearGradient: {
+    flex: 1,
+  },
+  divider: {
+    backgroundColor: '#505153',
+    height: StyleSheet.hairlineWidth,
+    width: screenWidth - 60,
   },
 });
+
+const Divider = () => (
+  <View style={styles.divider} />
+);
 
 const DefaultRowRenderer = ({ label, onPress }) => (
   <TouchableOpacity onPress={onPress} style={styles.rowContainer}>
@@ -60,7 +78,12 @@ const ListRenderer = ({ items, ItemRenderer }) => (
     <SwipeListView
       useFlatList
       data={items}
-      renderItem={({ index, item }) => <ItemRenderer {...item} index={index} />}
+      renderItem={({ index, item }) => (
+        <React.Fragment>
+          <ItemRenderer {...item} index={index} />
+          {index < items.length - 1 && <Divider />}
+        </React.Fragment>
+      )}
       renderHiddenItem={({ item }) => (
         <View style={styles.underRow}>
           <TouchableOpacity onPress={item.onDelete}>
@@ -78,7 +101,7 @@ const ListRenderer = ({ items, ItemRenderer }) => (
 );
 
 const ListView = ({ items, ItemRenderer, buttons }) => (
-  <View>
+  <LinearGradient colors={bgGradient} style={styles.linearGradient}>
     <ListRenderer
       items={items}
       ItemRenderer={ItemRenderer || DefaultRowRenderer}
@@ -86,7 +109,7 @@ const ListView = ({ items, ItemRenderer, buttons }) => (
     <ButtonBar
       buttons={buttons}
     />
-  </View>
+  </LinearGradient>
 );
 
 export default ListView;

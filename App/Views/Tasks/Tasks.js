@@ -3,11 +3,12 @@ import {
   Dimensions,
   Text,
   View,
-  TouchableHighlight,
+  TouchableOpacity,
   StyleSheet,
 } from 'react-native';
 import { compose, withProps } from 'recompose';
 import ListView from '../../Components/ListView';
+import { defaultFont } from '../../Common/font';
 
 const { width: screenWidth } = Dimensions.get('screen');
 
@@ -17,21 +18,21 @@ const styles = StyleSheet.create({
     paddingLeft: 15,
     justifyContent: 'center',
     height: 50,
-    borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: '#EFEFEF',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: 'transparent',
   },
   rowLabel: {
-    fontSize: 16,
+    fontFamily: defaultFont,
+    color: '#FFFFFF',
+    fontSize: 14,
   },
 });
 
 const TaskRow = ({ label, onPress }) => (
-  <TouchableHighlight onPress={onPress} style={styles.rowContainer} underlayColor="#EFEFEF">
+  <TouchableOpacity onPress={onPress} style={styles.rowContainer}>
     <View>
       <Text style={styles.rowLabel}>{label}</Text>
     </View>
-  </TouchableHighlight>
+  </TouchableOpacity>
 );
 
 const Tasks = ({ items, navButtons, buttons }) => (

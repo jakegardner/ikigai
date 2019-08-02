@@ -1,5 +1,4 @@
 import React from 'react';
-import uuid from 'react-native-uuid';
 import moment from 'moment';
 import { get } from 'lodash';
 import {
@@ -19,36 +18,50 @@ import {
   withHandlers,
   withStateHandlers,
 } from 'recompose';
+import LinearGradient from 'react-native-linear-gradient';
 import { withMappedNavigationParams } from 'react-navigation-props-mapper';
 import ButtonBar from '../../Components/ButtonBar';
 import RepeatControl from './RepeatControl';
 import { isIphoneX } from '../../Common/util';
+import { defaultFont } from '../../Common/font';
+import { bgGradient } from '../../Common/styles';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('screen');
 
 const styles = StyleSheet.create({
-  container: {
-    height: screenHeight - (isIphoneX ? 128 : 64),
-    width: screenWidth,
+  linearGradient: {
+    flex: 1,
   },
   formContainer: {
-    paddingHorizontal: 15,
+    paddingTop: 30,
+    height: screenHeight - (isIphoneX ? 128 : 64),
+    width: screenWidth,
+    paddingHorizontal: 30,
   },
   formInputContainer: {
-    flexDirection: 'row',
     alignItems: 'flex-start',
-    paddingVertical: 10,
+    marginBottom: 10,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomColor: '#D8D8D8',
   },
   formInputLabel: {
-    fontSize: 14,
-    marginRight: 15,
+    fontFamily: defaultFont,
+    fontSize: 11,
+    marginBottom: 10,
+    color: '#FFFFFF',
+    opacity: 0.7,
+    textTransform: 'uppercase',
   },
   label: {
+    fontFamily: defaultFont,
     fontSize: 14,
+    color: '#FFFFFF',
   },
   textInput: {
+    fontFamily: defaultFont,
+    color: '#FFFFFF',
     lineHeight: 18,
-    width: 250,
+    width: screenWidth - 60,
   },
   modalBackground: {
     position: 'absolute',
@@ -67,7 +80,7 @@ const styles = StyleSheet.create({
 
 const FormInput = ({ label, children }) => (
   <View style={styles.formInputContainer}>
-    <Text style={styles.formInputLabel}>{`${label}:`}</Text>
+    <Text style={styles.formInputLabel}>{label}</Text>
     {children}
   </View>
 );
@@ -83,6 +96,8 @@ const AddForm = ({
   setRepeatVisible,
   toggleDay,
   setDuration,
+  days,
+  duration,
 }) => (
   <View style={styles.formContainer}>
     <FormInput label="Name">
@@ -91,7 +106,7 @@ const AddForm = ({
     {topicName && (
       <FormInput label="Date">
         <TouchableOpacity onPress={() => setCalendarModalVisible(true)}>
-          <Text>{moment.utc(date).format('YYYY-MM-DD')}</Text>
+          <Text style={styles.label}>{moment.utc(date).format('YYYY-MM-DD')}</Text>
         </TouchableOpacity>
       </FormInput>
     )}
@@ -99,13 +114,15 @@ const AddForm = ({
       <FormInput label="Repeat">
         {repeat || repeatVisible ? (
           <RepeatControl
-            repeat={repeat}
+            days={days}
+            duration={duration}
             toggleDay={toggleDay}
             setDuration={setDuration}
+            width={screenWidth - 60}
           />
         ) : (
           <TouchableOpacity onPress={() => setRepeatVisible(true)}>
-            <Text>None</Text>
+            <Text style={styles.label}>None</Text>
           </TouchableOpacity>
         )}
       </FormInput>
@@ -128,8 +145,10 @@ const AddItem = ({
   setRepeatVisible,
   toggleDay,
   setDuration,
+  days,
+  duration,
 }) => (
-  <View style={styles.container}>
+  <LinearGradient colors={bgGradient} style={styles.linearGradient}>
     <AddForm
       topicName={topicName}
       setName={setName}
@@ -141,6 +160,8 @@ const AddItem = ({
       setRepeatVisible={setRepeatVisible}
       toggleDay={toggleDay}
       setDuration={setDuration}
+      days={days}
+      duration={duration}
     />
     <ButtonBar buttons={buttons} />
     <Modal
@@ -158,7 +179,7 @@ const AddItem = ({
         />
       </View>
     </Modal>
-  </View>
+  </LinearGradient>
 );
 
 const enhance = compose(
@@ -185,55 +206,12 @@ const enhance = compose(
     },
   ),
   withProps(({
-    navigation,
-    addTopic,
-    addTask,
-    editTask,
-    name,
-    task,
-    date,
-    days,
-    duration,
-    topicId,
+    onSave,
   }) => ({
     buttons: [
-      { label: 'Cancel', onPress: () => navigation.goBack() },
       {
         label: 'Save',
-        onPress: () => {
-          if (task) {
-            editTask({
-              task: {
-                ...task,
-                label: name,
-                date,
-                repeat: {
-                  days,
-                  duration,
-                },
-              },
-            });
-          } else if (topicId) {
-            addTask({
-              task: {
-                topicId,
-                label: name,
-                id: uuid.v4(),
-                repeat: {
-                  days,
-                  duration,
-                },
-              },
-            });
-          } else {
-            addTopic({
-              id: uuid.v4(),
-              label: name,
-              tasks: [],
-            });
-          }
-          navigation.goBack();
-        },
+        onPress: onSave,
       },
     ],
   })),
@@ -247,11 +225,4 @@ const enhance = compose(
   }),
 );
 
-const wrapped = enhance(AddItem);
-wrapped.navigationOptions = ({ navigation }) => ({
-  title: (navigation.getParam('task') && `Edit ${navigation.getParam('task').label}`)
-    || (navigation.getParam('topicName') && `New task for ${navigation.getParam('topicName')}`)
-    || 'New Topic',
-});
-
-export default wrapped;
+export default enhance(AddItem);

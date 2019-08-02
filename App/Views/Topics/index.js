@@ -3,7 +3,8 @@ import { connect } from 'react-redux';
 import { compose, withHandlers } from 'recompose';
 import Topics from './Topics';
 import { deleteTopic } from './duck';
-import NavigationButton from '../../Components/NavigationButton';
+import { AddButton, BackButton } from '../../Components/NavigationButton';
+import { headerStyles } from '../../Common/styles';
 
 const mapStateToProps = state => ({
   items: state.topics.items,
@@ -27,12 +28,17 @@ const enhance = compose(
 const wrapped = enhance(Topics);
 wrapped.navigationOptions = ({ navigation }) => ({
   title: 'Topics',
+  headerLeft: (
+    <BackButton
+      onPress={() => navigation.goBack()}
+    />
+  ),
   headerRight: (
-    <NavigationButton
-      label="Add"
+    <AddButton
       onPress={() => navigation.navigate('AddItem')}
     />
   ),
+  ...headerStyles,
 });
 
 export default wrapped;

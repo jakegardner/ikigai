@@ -5,10 +5,11 @@ import {
   TouchableOpacity,
   StyleSheet,
 } from 'react-native';
-import { compose, withState, withHandlers } from 'recompose';
+import { compose, withHandlers } from 'recompose';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faCircle as faSolidCircle } from '@fortawesome/free-solid-svg-icons';
 import { faCircle as faEmptyCircle } from '@fortawesome/free-regular-svg-icons';
+import { defaultFont } from '../../Common/font';
 
 const styles = StyleSheet.create({
   row: {
@@ -19,6 +20,8 @@ const styles = StyleSheet.create({
   label: {
     marginLeft: 10,
     fontSize: 14,
+    fontFamily: defaultFont,
+    color: '#FFFFFF',
   },
 });
 
@@ -27,8 +30,8 @@ const RadioButton = ({ checked, label, onPress }) => (
     <View style={styles.row}>
       <View>
         {checked
-          ? <FontAwesomeIcon icon={faSolidCircle} />
-          : <FontAwesomeIcon icon={faEmptyCircle} />
+          ? <FontAwesomeIcon icon={faSolidCircle} color="white" />
+          : <FontAwesomeIcon icon={faEmptyCircle} color="white" />
         }
       </View>
       <Text style={styles.label}>{label}</Text>
@@ -37,13 +40,10 @@ const RadioButton = ({ checked, label, onPress }) => (
 );
 
 const enhance = compose(
-  withState('checked', 'toggleChecked', ({ checked }) => checked),
   withHandlers({
-    onPress: ({ onCheck, checked, toggleChecked }) => () => {
-      const newState = !checked;
-      toggleChecked(newState);
+    onPress: ({ onCheck }) => () => {
       if (onCheck) {
-        onCheck(newState);
+        onCheck();
       }
     },
   }),
