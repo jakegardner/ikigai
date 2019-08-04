@@ -61,7 +61,6 @@ const enhance = compose(
     navigation,
     items,
     onTaskPress,
-    onDeletePress,
   }) => ({
     buttons: [
       { label: 'Topics', onPress: () => navigation.navigate('Topics') },
@@ -69,7 +68,6 @@ const enhance = compose(
     items: items.map(item => ({
       ...item,
       onPress: () => onTaskPress(item),
-      onDelete: () => onDeletePress(item),
     })),
   })),
 );

@@ -18,7 +18,6 @@ const styles = StyleSheet.create({
     paddingLeft: 15,
     justifyContent: 'center',
     height: 50,
-    backgroundColor: 'transparent',
   },
   rowLabel: {
     fontFamily: defaultFont,
@@ -38,11 +37,12 @@ const TopicRow = ({ label, onPress }) => (
   </TouchableOpacity>
 );
 
-const Topics = ({ items, buttons }) => (
+const Topics = ({ items, buttons, onDelete }) => (
   <ListView
     items={items}
     ItemRenderer={TopicRow}
     buttons={buttons}
+    onDeleteItem={onDelete}
   />
 );
 
@@ -51,7 +51,6 @@ const enhance = compose(
     navigation,
     items,
     onTaskPress,
-    onDeletePress,
   }) => ({
     buttons: [
       { label: 'Today', onPress: () => navigation.navigate('Today') },
@@ -59,7 +58,6 @@ const enhance = compose(
     items: items.map(item => ({
       ...item,
       onPress: () => onTaskPress(item),
-      onDelete: () => onDeletePress(item),
     })),
   })),
 );

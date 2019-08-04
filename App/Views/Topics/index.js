@@ -21,7 +21,7 @@ const enhance = compose(
       topicName: item.label,
       topicId: item.id,
     }),
-    onDeletePress: ({ dispatchDeleteTopic }) => task => dispatchDeleteTopic(task),
+    onDelete: ({ dispatchDeleteTopic }) => id => dispatchDeleteTopic({ id }),
   }),
 );
 

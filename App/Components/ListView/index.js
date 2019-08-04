@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import { SwipeListView } from 'react-native-swipe-list-view';
+import { compose, withHandlers } from 'recompose';
 import ButtonBar from '../ButtonBar';
 import { isIphoneX } from '../../Common/util';
 import { defaultFont } from '../../Common/font';
@@ -57,7 +58,6 @@ const styles = StyleSheet.create({
   divider: {
     backgroundColor: '#505153',
     height: StyleSheet.hairlineWidth,
-    width: screenWidth - 60,
   },
 });
 
@@ -73,38 +73,36 @@ const DefaultRowRenderer = ({ label, onPress }) => (
   </TouchableOpacity>
 );
 
-const ListRenderer = ({ items, ItemRenderer }) => (
+const ListRenderer = ({ items, ItemRenderer, onSwipe }) => (
   <View style={styles.listContainer}>
     <SwipeListView
-      useFlatList
       data={items}
+      keyExtractor={({ id }) => id}
       renderItem={({ index, item }) => (
-        <React.Fragment>
-          <ItemRenderer {...item} index={index} />
-          {index < items.length - 1 && <Divider />}
-        </React.Fragment>
+        <ItemRenderer
+          {...item}
+          index={index}
+        />
       )}
-      renderHiddenItem={({ item }) => (
-        <View style={styles.underRow}>
-          <TouchableOpacity onPress={item.onDelete}>
-            <View style={styles.deleteButton}>
-              <Text style={styles.underlayButtonText}>Delete</Text>
-            </View>
-          </TouchableOpacity>
-        </View>
-      )}
-      leftOpenValue={75}
-      rightOpenValue={-150}
-      disableRightSwipe
+      renderHiddenItem={() => <View />}
+      ItemSeparatorComponent={Divider}
+      rightOpenValue={-screenWidth}
+      onSwipeValueChange={onSwipe}
     />
   </View>
 );
 
-const ListView = ({ items, ItemRenderer, buttons }) => (
+const ListView = ({
+  items,
+  ItemRenderer,
+  buttons,
+  onSwipe,
+}) => (
   <LinearGradient colors={bgGradient} style={styles.linearGradient}>
     <ListRenderer
       items={items}
       ItemRenderer={ItemRenderer || DefaultRowRenderer}
+      onSwipe={onSwipe}
     />
     <ButtonBar
       buttons={buttons}
@@ -112,4 +110,12 @@ const ListView = ({ items, ItemRenderer, buttons }) => (
   </LinearGradient>
 );
 
-export default ListView;
+export default compose(
+  withHandlers({
+    onSwipe: ({ onDeleteItem }) => ({ key, value }) => {
+      if (value <= -screenWidth && onDeleteItem) {
+        onDeleteItem(key);
+      }
+    },
+  }),
+)(ListView);

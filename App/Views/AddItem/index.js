@@ -26,8 +26,8 @@ const mapDispatchToProps = {
 };
 
 const enhance = compose(
-  connect(null, mapDispatchToProps),
   withMappedNavigationParams(),
+  connect(null, mapDispatchToProps),
   withState('name', 'setName', ({ task }) => get(task, 'label')),
   withState('date', 'setDate', ({ task }) => moment.utc(get(task, 'date')) || moment.utc()),
   withState('repeat', 'setRepeat', ({ task }) => get(task, 'repeat')),

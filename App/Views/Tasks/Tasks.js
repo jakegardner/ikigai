@@ -35,12 +35,18 @@ const TaskRow = ({ label, onPress }) => (
   </TouchableOpacity>
 );
 
-const Tasks = ({ items, navButtons, buttons }) => (
+const Tasks = ({
+  items,
+  navButtons,
+  buttons,
+  onDelete,
+}) => (
   <ListView
     items={items}
     ItemRenderer={TaskRow}
     navButtons={navButtons}
     buttons={buttons}
+    onDeleteItem={onDelete}
   />
 );
 
@@ -49,7 +55,6 @@ const enhance = compose(
     navigation,
     items,
     onTaskPress,
-    onDeletePress,
   }) => ({
     buttons: [
       { label: 'Topics', onPress: () => navigation.navigate('Topics') },
@@ -57,7 +62,6 @@ const enhance = compose(
     items: items.map(item => ({
       ...item,
       onPress: () => onTaskPress(item),
-      onDelete: () => onDeletePress(item),
     })),
   })),
 );
