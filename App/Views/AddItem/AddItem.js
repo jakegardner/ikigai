@@ -1,6 +1,5 @@
 import React from 'react';
 import moment from 'moment';
-import { get } from 'lodash';
 import {
   Dimensions,
   View,
@@ -14,12 +13,9 @@ import { CalendarList } from 'react-native-calendars';
 import {
   compose,
   withProps,
-  withState,
   withHandlers,
-  withStateHandlers,
 } from 'recompose';
 import LinearGradient from 'react-native-linear-gradient';
-import { withMappedNavigationParams } from 'react-navigation-props-mapper';
 import ButtonBar from '../../Components/ButtonBar';
 import RepeatControl from './RepeatControl';
 import { isIphoneX } from '../../Common/util';
@@ -183,28 +179,6 @@ const AddItem = ({
 );
 
 const enhance = compose(
-  withMappedNavigationParams(),
-  withState('name', 'setName', ({ task }) => get(task, 'label')),
-  withState('date', 'setDate', ({ task }) => moment.utc(get(task, 'date')) || moment.utc()),
-  withState('repeat', 'setRepeat', ({ task }) => get(task, 'repeat')),
-  withState('calendarModalVisible', 'setCalendarModalVisible', false),
-  withState('repeatVisible', 'setRepeatVisible', false),
-  withStateHandlers(
-    ({ repeat }) => ({
-      days: repeat ? repeat.days : Array(7).fill(false),
-      duration: repeat ? repeat.duration : null,
-    }),
-    {
-      toggleDay: ({ days }) => (index) => {
-        const newDays = [...days];
-        newDays[index] = !days[index];
-        return { days: newDays };
-      },
-      setDuration: () => value => ({
-        duration: value,
-      }),
-    },
-  ),
   withProps(({
     onSave,
   }) => ({

@@ -1,6 +1,14 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { compose, withHandlers } from 'recompose';
+import { get } from 'lodash';
+import moment from 'moment';
+import {
+  compose,
+  withState,
+  withHandlers,
+  withStateHandlers,
+} from 'recompose';
+import { withMappedNavigationParams } from 'react-navigation-props-mapper';
 import uuid from 'react-native-uuid';
 import AddItem from './AddItem';
 import {
@@ -19,6 +27,28 @@ const mapDispatchToProps = {
 
 const enhance = compose(
   connect(null, mapDispatchToProps),
+  withMappedNavigationParams(),
+  withState('name', 'setName', ({ task }) => get(task, 'label')),
+  withState('date', 'setDate', ({ task }) => moment.utc(get(task, 'date')) || moment.utc()),
+  withState('repeat', 'setRepeat', ({ task }) => get(task, 'repeat')),
+  withState('calendarModalVisible', 'setCalendarModalVisible', false),
+  withState('repeatVisible', 'setRepeatVisible', false),
+  withStateHandlers(
+    ({ repeat }) => ({
+      days: repeat ? repeat.days : Array(7).fill(false),
+      duration: repeat ? repeat.duration : null,
+    }),
+    {
+      toggleDay: ({ days }) => (index) => {
+        const newDays = [...days];
+        newDays[index] = !days[index];
+        return { days: newDays };
+      },
+      setDuration: () => value => ({
+        duration: value,
+      }),
+    },
+  ),
   withHandlers({
     onSave: ({
       navigation,
@@ -37,7 +67,7 @@ const enhance = compose(
           task: {
             ...task,
             label: name,
-            date,
+            date: date.valueOf(),
             repeat: {
               days,
               duration,
@@ -50,6 +80,7 @@ const enhance = compose(
             topicId,
             label: name,
             id: uuid.v4(),
+            date: date.valueOf(),
             repeat: {
               days,
               duration,
