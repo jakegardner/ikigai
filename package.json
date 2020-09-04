@@ -39,7 +39,7 @@
     "redux-persist-seamless-immutable": "^2.0.0",
     "reselect": "^4.0.0",
     "seamless-immutable": "^7.1.4",
-    "simple-markdown": "0.4.4"
+    "simple-markdown": "0.5.2"
   },
   "devDependencies": {
     "@babel/core": "^7.4.5",
