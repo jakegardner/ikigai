@@ -15,7 +15,7 @@
     "@fortawesome/react-native-fontawesome": "^0.1.0",
     "@storybook/addon-ondevice-knobs": "^4.1.18",
     "@storybook/addon-ondevice-notes": "^4.1.18",
-    "lodash": "4.17.13",
+    "lodash": "4.17.21",
     "mockdate": "^2.0.3",
     "moment": "^2.24.0",
     "react": "16.8.3",
