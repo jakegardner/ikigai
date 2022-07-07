@@ -17,7 +17,7 @@
     "@storybook/addon-ondevice-notes": "^4.1.18",
     "lodash": "4.17.13",
     "mockdate": "^2.0.3",
-    "moment": "^2.24.0",
+    "moment": "^2.29.4",
     "react": "16.8.3",
     "react-native": "0.59.8",
     "react-native-calendars": "^1.191.0",
